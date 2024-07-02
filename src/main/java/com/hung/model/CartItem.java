@@ -1,31 +1,37 @@
 package com.hung.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-public class OrderItem {
+public class CartItem {
     // Attribute
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
+    @JsonIgnore
+    private Cart cart;
+    @ManyToOne
     private Food food;
     private int quantity;
-    private Long totalPrice;
     private List<String> ingredients;
+    private Long totalPrice;
+
     // Constructor
 
-    public OrderItem() {
+    public CartItem() {
     }
 
-    public OrderItem(Long id, Food food, int quantity, Long totalPrice, List<String> ingredients) {
+    public CartItem(Long id, Cart cart, Food food, int quantity, List<String> ingredients, Long totalPrice) {
         this.id = id;
+        this.cart = cart;
         this.food = food;
         this.quantity = quantity;
-        this.totalPrice = totalPrice;
         this.ingredients = ingredients;
+        this.totalPrice = totalPrice;
     }
     // Getter and setter
 
@@ -35,6 +41,14 @@ public class OrderItem {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public Food getFood() {
@@ -53,19 +67,19 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Long getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Long totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public List<String> getIngredients() {
         return ingredients;
     }
 
     public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public Long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
