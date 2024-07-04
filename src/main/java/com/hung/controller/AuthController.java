@@ -66,8 +66,6 @@ public class AuthController {
         authResponse.setMessage("Register success");
         authResponse.setRole(savedUser.getRole());
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED );
-
-
     }
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest req) {
