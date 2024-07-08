@@ -1,5 +1,6 @@
 package com.hung.controller;
 
+import com.hung.dto.RestaurantDto;
 import com.hung.model.Restaurant;
 import com.hung.model.User;
 import com.hung.service.RestaurantService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/restaurants")
 public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
@@ -45,5 +47,15 @@ public class RestaurantController {
 
         Restaurant restaurant = restaurantService.findRestaurantById(id);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
+    }
+    @PutMapping("/{id}/add-favorites")
+    public ResponseEntity<RestaurantDto> addToFavorites(
+            @RequestHeader("Authorization") String jwt,
+            @PathVariable Long id
+    ) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        RestaurantDto restaurantDto = restaurantService.addToFavourites(id, user);
+        return new ResponseEntity<>(restaurantDto, HttpStatus.OK);
     }
 }

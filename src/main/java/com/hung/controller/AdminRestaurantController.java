@@ -43,7 +43,6 @@ public class AdminRestaurantController {
     }
     @PutMapping("/{id}/status")
     public ResponseEntity<Restaurant> deleteRestaurant(
-            @RequestBody CreateRestaurantRequest req,
             @RequestHeader("Authorization") String jwt,
             @PathVariable Long id
     ) throws Exception {
@@ -55,12 +54,11 @@ public class AdminRestaurantController {
     }
     @GetMapping("/user")
     public ResponseEntity<Restaurant> findRestaurantByUserId(
-            @RequestBody CreateRestaurantRequest req,
             @RequestHeader("Authorization") String jwt
     ) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
 
-        Restaurant restaurant = restaurantService.getRestaurantByUserId(user.getId());
+        Restaurant restaurant = restaurantService.getRestaurantByUserId(Long.parseLong(user.getId() + ""));
 
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }

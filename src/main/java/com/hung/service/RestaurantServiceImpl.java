@@ -109,11 +109,20 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantDto.setTitle(restaurant.getName());
         restaurantDto.setId(restaurantId);
 
-        if(user.getFavourites().contains(restaurantDto)) {
-            user.getFavourites().remove(restaurantDto);
+        boolean isFavourited = false;
+        List<RestaurantDto> favouriteList = user.getFavourites();
+        for(RestaurantDto favourite : favouriteList) {
+            if(favourite.getId().equals(restaurantId)) {
+                isFavourited = true;
+                break;
+            }
+        }
+        if(isFavourited) {
+            favouriteList.removeIf(favor -> favor.getId().equals(restaurantId));
         }
         else
-            user.getFavourites().add(restaurantDto);
+            favouriteList.add(restaurantDto);
+
         userRepository.save(user);
         return restaurantDto;
     }
