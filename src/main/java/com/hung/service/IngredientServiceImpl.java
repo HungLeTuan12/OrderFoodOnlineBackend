@@ -14,20 +14,21 @@ import java.util.Optional;
 @Service
 public class IngredientServiceImpl implements IngredientsService {
     @Autowired
-    private IngredientItemRepository ingredientItemRepository;
-    @Autowired
     private IngredientCategoryRepository ingredientCategoryRepository;
     @Autowired
     private RestaurantService restaurantService;
+    @Autowired
+    private IngredientItemRepository ingredientItemRepository;
+
     @Override
     public IngredientCategory createIngredientCategory(String name, Long restaurantId) throws Exception {
+        IngredientCategory ingredientCategory = new IngredientCategory();
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
 
-        IngredientCategory createIngredientCategory = new IngredientCategory();
-        createIngredientCategory.setRestaurant(restaurant);
-        createIngredientCategory.setName(name);
+        ingredientCategory.setRestaurant(restaurant);
+        ingredientCategory.setName(name);
 
-        return ingredientCategoryRepository.save(createIngredientCategory);
+        return ingredientCategoryRepository.save(ingredientCategory);
     }
 
     @Override
@@ -35,8 +36,9 @@ public class IngredientServiceImpl implements IngredientsService {
         Optional<IngredientCategory> ingredientCategory = ingredientCategoryRepository.findById(id);
 
         if(ingredientCategory.isEmpty()) {
-            throw new Exception("Ingredient category not found ....");
+            throw new Exception("Ingredient category is not found...");
         }
+
         return ingredientCategory.get();
     }
 
@@ -48,38 +50,34 @@ public class IngredientServiceImpl implements IngredientsService {
 
     @Override
     public List<IngredientsItem> findRestaurantsIngredients(Long restaurantId) throws Exception {
-
         return ingredientItemRepository.findByRestaurantId(restaurantId);
     }
 
     @Override
     public IngredientsItem createIngredientItem(Long restaurantId, String ingredientName, Long categoryId) throws Exception {
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
-
         IngredientCategory category = findIngredientCategory(categoryId);
 
         IngredientsItem item = new IngredientsItem();
-        item.setName(ingredientName);
         item.setRestaurant(restaurant);
+        item.setName(ingredientName);
         item.setCategory(category);
 
-        IngredientsItem savedIngredientItem = ingredientItemRepository.save(item);
-        category.getIngredients().add(savedIngredientItem);
-
-        return savedIngredientItem;
+        IngredientsItem savedItem = ingredientItemRepository.save(item);
+        category.getIngredients().add(savedItem);
+        return savedItem;
     }
 
     @Override
     public IngredientsItem updateStock(Long id) throws Exception {
-        Optional<IngredientsItem> item = ingredientItemRepository.findById(id);
+        Optional<IngredientsItem> ingredientCategory = ingredientItemRepository.findById(id);
 
-        if(item.isEmpty()) {
-            throw new Exception("Item not found ....");
+        if(ingredientCategory.isEmpty()) {
+            throw new Exception("Ingredient category is not found...");
         }
 
-        IngredientsItem items = item.get();
+        IngredientsItem items = ingredientCategory.get();
         items.setInStock(!items.isInStock());
-
         return ingredientItemRepository.save(items);
     }
 }
