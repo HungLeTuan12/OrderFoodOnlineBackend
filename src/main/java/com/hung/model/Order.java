@@ -27,14 +27,14 @@ public class Order {
     @OneToMany
     private List<OrderItem> items;
     private int totalItem;
-    private int totalPrice;
+    private Long totalPrice;
 //    private Payment payment;
     // Constructor
 
     public Order() {
     }
 
-    public Order(Long id, User customer, Restaurant restaurant, Long totalAmount, String orderStatus, Date createdAt, Address deliveryAddress, List<OrderItem> items, int totalItem, int totalPrice) {
+    public Order(Long id, User customer, Restaurant restaurant, Long totalAmount, String orderStatus, Date createdAt, Address deliveryAddress, List<OrderItem> items, int totalItem, Long totalPrice) {
         this.id = id;
         this.customer = customer;
         this.restaurant = restaurant;
@@ -120,11 +120,11 @@ public class Order {
         this.totalItem = totalItem;
     }
 
-    public int getTotalPrice() {
+    public Long getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(Long totalPrice) {
         this.totalPrice = totalPrice;
     }
 }
